@@ -1,6 +1,10 @@
 # Cypress videos
 *.mp4
 
+# cbsh contents
+cbsh/*
+!cbsh/.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
