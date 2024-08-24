@@ -2,8 +2,8 @@
 *.mp4
 
 # cbsh contents
-cbsh/*
-!cbsh/.gitignore
+api/cbsh/*
+!api/cbsh/.gitignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
