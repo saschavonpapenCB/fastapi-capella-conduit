@@ -27,6 +27,39 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+
+      # Install CBShell
+      #- name: Install CBShell
+      #  run: |
+      #    curl -sSL https://packages.couchbase.com/releases/cbshell-1.0.0.tar.gz | tar xz
+      #    sudo mv cbshell /usr/local/bin/
+
+
+      # CBShell setup to create Couchbase resources
+      - name: Setup CBShell and Couchbase resources
+        uses: ldoguin/setup-cbsh@develop
+        with:
+          version: '1.0.0'
+          enable-plugins: true
+          config: ${{ secrets.CBSHELL_CONFIG }}
+
+
+      - name: Create Couchbase Bucket, Scopes, Collections, and Indexes
+        run: |
+          echo "Creating bucket, scopes, collections, and indexes"
+          echo "CREATE BUCKET `${{ vars.DB_BUCKET_NAME }}` WITH { 'ramQuota': 100 };" | cbsh
+          echo "CREATE SCOPE `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`;" | cbsh
+
+          for collection in "articles" "users" "comments"; do
+            echo "Creating collection $collection in scope ${{ vars.DB_BUCKET_NAME }}"
+            echo "CREATE COLLECTION `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`.`$collection`;" | cbsh
+
+            echo "Creating primary index on collection $collection in scope ${{ vars.DB_SCOPE_NAME }}"
+            echo "CREATE PRIMARY INDEX ON `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`.`$collection`;" | cbsh
+
+          done
+
   
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
