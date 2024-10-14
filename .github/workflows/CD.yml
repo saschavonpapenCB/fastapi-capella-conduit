@@ -48,15 +48,15 @@ jobs:
       - name: Create Couchbase Bucket, Scopes, Collections, and Indexes
         run: |
           echo "Creating bucket, scopes, collections, and indexes"
-          echo "CREATE BUCKET `${{ vars.DB_BUCKET_NAME }}` WITH { 'ramQuota': 100 };" | cbsh
-          echo "CREATE SCOPE `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`;" | cbsh
+          echo "CREATE BUCKET \`${{ vars.DB_BUCKET_NAME }}\` WITH { 'ramQuota': 100 };" | cbsh
+          echo "CREATE SCOPE \`${{ vars.DB_BUCKET_NAME }}\`.\`${{ vars.DB_SCOPE_NAME }}\`;" | cbsh
 
           for collection in "articles" "users" "comments"; do
             echo "Creating collection $collection in scope ${{ vars.DB_BUCKET_NAME }}"
-            echo "CREATE COLLECTION `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`.`$collection`;" | cbsh
+            echo "CREATE COLLECTION \`${{ vars.DB_BUCKET_NAME }}\`.\`${{ vars.DB_SCOPE_NAME }}\`.\`$collection\`;" | cbsh
 
             echo "Creating primary index on collection $collection in scope ${{ vars.DB_SCOPE_NAME }}"
-            echo "CREATE PRIMARY INDEX ON `${{ vars.DB_BUCKET_NAME }}`.`${{ vars.DB_SCOPE_NAME }}`.`$collection`;" | cbsh
+            echo "CREATE PRIMARY INDEX ON \`${{ vars.DB_BUCKET_NAME }}\`.\`${{ vars.DB_SCOPE_NAME }}\`.\`$collection\`;" | cbsh
 
           done
 
