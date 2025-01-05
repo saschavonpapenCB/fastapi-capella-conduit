@@ -3,18 +3,27 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${var.project_prefix}-vpc"
+  }
 }
 
 resource "aws_subnet" "subnet_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "ap-southeast-2a"
+  tags = {
+    Name = "${var.project_prefix}-subnet-a"
+  }
 }
 
 resource "aws_subnet" "subnet_b" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "ap-southeast-2b"
+  tags = {
+    Name = "${var.project_prefix}-subnet-b"
+  }
 }
 
 resource "aws_security_group" "ecs_sg" {
@@ -40,10 +49,14 @@ resource "aws_security_group" "ecs_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "${var.project_prefix}-ecs-sg"
+  }
 }
 
 resource "aws_ecs_service" "cypress" {
-  name            = "cypress-service"
+  name            = "${var.project_prefix}-cypress-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.cypress.arn
   desired_count   = 1
@@ -56,7 +69,7 @@ resource "aws_ecs_service" "cypress" {
 }
 
 resource "aws_ecs_service" "backend" {
-  name            = "backend-service"
+  name            = "${var.project_prefix}-backend-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.backend.arn
   desired_count   = 1
@@ -69,7 +82,7 @@ resource "aws_ecs_service" "backend" {
 }
 
 resource "aws_ecs_service" "frontend" {
-  name            = "frontend-service"
+  name            = "${var.project_prefix}-frontend-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.frontend.arn
   desired_count   = 1
@@ -82,7 +95,7 @@ resource "aws_ecs_service" "frontend" {
 }
 
 resource "aws_ecs_task_definition" "backend" {
-  family                = "backend-task"
+  family                = "${var.project_prefix}-backend-task"
   network_mode          = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
@@ -92,7 +105,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       name      = "backend-container"
-      image     = "${aws_ecr_repository.backend.repository_url}:${var.backend_image_tag}"
+      image     = "${aws_ecr_repository.backend.repository_url}:${var.project_prefix}-backend-image"
       essential = true
       portMappings = [
         {
@@ -105,7 +118,7 @@ resource "aws_ecs_task_definition" "backend" {
 }
 
 resource "aws_ecs_task_definition" "frontend" {
-  family                = "frontend-task"
+  family                = "${var.project_prefix}-frontend-task"
   network_mode          = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
@@ -115,7 +128,7 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = jsonencode([
     {
       name      = "frontend-container"
-      image     = "${aws_ecr_repository.frontend.repository_url}:${var.frontend_image_tag}"
+      image     = "${aws_ecr_repository.frontend.repository_url}:${var.project_prefix}-frontend-image"
       essential = true
       portMappings = [
         {
@@ -128,7 +141,7 @@ resource "aws_ecs_task_definition" "frontend" {
 }
 
 resource "aws_ecs_task_definition" "cypress" {
-  family                = "cypress-task"
+  family                = "${var.project_prefix}-cypress-task"
   network_mode          = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
@@ -138,7 +151,7 @@ resource "aws_ecs_task_definition" "cypress" {
   container_definitions = jsonencode([
     {
       name      = "cypress-container"
-      image     = "${aws_ecr_repository.cypress.repository_url}:${var.cypress_image_tag}"
+      image     = "${aws_ecr_repository.cypress.repository_url}:${var.project_prefix}-cypress-image"
       essential = true
       volumes = [
         {
@@ -153,7 +166,7 @@ resource "aws_ecs_task_definition" "cypress" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
+  name = "${var.project_prefix}-ecsTaskExecutionRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -174,12 +187,12 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = var.ecs_cluster_name
+  name = "${var.project_prefix}-ecs-cluster"
 }
 
 # tfsec:ignore:aws-ecr-repository-customer-key
 resource "aws_ecr_repository" "backend" {
-  name                 = var.backend_repository_name
+  name                 = "${var.project_prefix}-backend-repo"
   image_tag_mutability = "MUTABLE"
   image_scanning_configuration {
     scan_on_push = true
@@ -191,7 +204,7 @@ resource "aws_ecr_repository" "backend" {
 }
 
 resource "aws_ecr_repository" "frontend" {
-  name                 = var.frontend_repository_name
+  name                 = "${var.project_prefix}-frontend-repo"
   image_tag_mutability = "MUTABLE"
   image_scanning_configuration {
     scan_on_push = true
@@ -203,7 +216,7 @@ resource "aws_ecr_repository" "frontend" {
 }
 
 resource "aws_ecr_repository" "cypress" {
-  name                 = var.cypress_repository_name
+  name                 = "${var.project_prefix}-cypress-repo"
   image_tag_mutability = "MUTABLE"
   image_scanning_configuration {
     scan_on_push = true
