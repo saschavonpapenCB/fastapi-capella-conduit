@@ -3,7 +3,7 @@
 # Check if the environment argument is provided
 if [ -z "$1" ]; then
     echo "Usage: $0 <environment>"
-    echo "Environment must be one of 'dev', 'stage', or 'prod'."
+    echo "Environment must be 'staging' or 'production'."
     exit 1
 fi
 
@@ -11,9 +11,9 @@ fi
 ENV=$1
 
 # Validate the argument
-if [[ "$ENV" != "dev" && "$ENV" != "stage" && "$ENV" != "prod" ]]; then
+if [[ "$ENV" != "staging" && "$ENV" != "production" ]]; then
     echo "Invalid environment: $ENV"
-    echo "Environment must be one of 'dev', 'stage', or 'prod'."
+    echo "Environment must be 'staging' or 'production'."
     exit 1
 fi
 
