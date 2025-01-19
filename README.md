@@ -17,7 +17,7 @@ For more information on how to this works with other frontends/backends, head ov
 # Conduit API with FastAPI and Couchbase Capella
 
 ## Table of Contents
-- [Introduction to RealWorld](#introductionRealWorld)
+- [Introduction to RealWorld](#introduction-to-realworld)
 - [Introduction to Capella](#introductionCapella)
 - [Project Outline](#projectoutline)
 - [Stage 1: Developing Conduit API with FastAPI and Capella](#stageone)
@@ -26,7 +26,7 @@ For more information on how to this works with other frontends/backends, head ov
 - [Stage 4: Infrastructure Automation with Terraform and Conduit Deployment to AWS](#stagefour)
 - [Summary](#summary)
 
-## Intrduction to RealWorld
+## Introduction to RealWorld
 [RealWorld](https://realworld-docs.netlify.app/) is an open-source project that acts as a [Rosetta Stone](https://en.wikipedia.org/wiki/Rosetta_Stone) of web-framework implementations of an app named Conduit (click here for [demo](https://demo.realworld.io/#/)). Conduit is a clone of the blogging platform medium.com and is a simple yet robust web app that includes:
 - Querying and persisting data to a database
 - An authentication system
