@@ -62,18 +62,62 @@ The Staging environment serves as a deployment testing ground, using the CD pipe
 ---
 # Stage 1
 ## Developing Conduit API with FastAPI and Capella
+### Preparation
+
+### Models and Schemas
+
+### API Start Up
+
+### API Database
+
+### API Endpoints
+
+### Security
+
+### Local Testing
+
+### CI Pipeline
 
 ---
 # Stage 2
 ## Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite
+### Preparation
+
+### Selecting and Integrating a Frontend
+
+### Full-Stack Conduit
+
+### Cypress E2E Testing
+
+### Integrating E2E Testing into CI Workflow
 
 ---
 # Stage 3
 ## Containerizing Conduit with Docker
+### Containerizing the API
+
+### Containerizing the Frontend
+
+### Containerizing the E2E Testing
+
+### Composing Containers
 
 ---
 # Stage 4
 ## Infrastructure Automation with Terraform and Conduit Deployment to AWS
+### Preparation
+
+### Deployment to AWS with ECR and ECS
+
+### Introduction to Terraform
+
+### Capella Instance Provisioning
+
+### Using CBShell for Capella Management
+
+### CD Pipeline
+
+### TD Pipeline
 
 ---
 # Summary
