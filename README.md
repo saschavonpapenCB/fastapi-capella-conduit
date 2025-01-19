@@ -78,9 +78,9 @@ The `.env.example` file is an example layout for a `.env` file, which will conta
   b. Leave the CORS variables as is. The remaining variables will be added in coming steps.
 7. Configure JWT settings.
   a. Create a random secret key that will be used to sign the JWT tokens. To do this open a terminal and run this command:
-  ```
-  ./scripts/local/generate-secret-key.sh
-  ```
+    ```bash
+    ./scripts/local/generate-secret-key.sh
+    ```
   b. Copy the resulting string into the remote GitHub repo by setting it as a development environment secret called `JWT_SECRET`.
   c. Also copy the resulting string into the local `.env` file by setting it as the environment variable also called `JWT_SECRET`.
 8. Create a [Capella account](https://cloud.couchbase.com/sign-up).
