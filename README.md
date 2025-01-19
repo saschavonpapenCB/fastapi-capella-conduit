@@ -78,7 +78,7 @@ The `.env.example` file is an example layout for a `.env` file, which will conta
   b. Leave the CORS variables as is. The remaining variables will be added in coming steps.
 7. Configure JWT settings.
   a. Create a random secret key that will be used to sign the JWT tokens. To do this open a terminal and run this command:
-    ```bash
+    ```sh
     ./scripts/local/generate-secret-key.sh
     ```
   b. Copy the resulting string into the remote GitHub repo by setting it as a development environment secret called `JWT_SECRET`.
