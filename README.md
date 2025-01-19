@@ -69,6 +69,75 @@ To prepare for this stage, follow these steps:
 ```
 ./scripts/local/install-api-deps.sh
 ```
+5. Create a remote origin repo in GitHub. This will be for executing the CI workflow.
+  a. Create a remote repo in GitHub and as the local repo’s origin.
+  b. In `Environments` under `Settings`, create an environment called `development` and leave all of the configurations as default (repository and environment variables and secrets will be added in coming steps).
+6. Set up .env file. There are two `.env.example` files in the project, one in the root directory one in the `/api` directory. The one in the root directory is used by the infrastructure described in Stage 4 (wait until then to implement). The one in the `/api` directory is used by the Conduit API and needs to be implemented in this step.
+The `.env.example` file is an example layout for a `.env` file, which will contain all of the environment variables. This file will be ignored by the `.gitignore` file and keep the `env` variables local, when the API is run in the CI workflow on GitHub, it will use the environment variables defined there (also implemented in later steps).
+  a. Change the root directory `.env` file name from `.env.example` to `.env`.
+  b. Leave the CORS variables as is. The remaining variables will be added in coming steps.
+7. Configure JWT settings.
+  a. Create a random secret key that will be used to sign the JWT tokens. To do this open a terminal and run this command:
+  ```
+  ./scripts/local/generate-secret-key.sh
+  ```
+  b. Copy the resulting string into the remote GitHub repo by setting it as a development environment secret called `JWT_SECRET`.
+  c. Also copy the resulting string into the local `.env` file by setting it as the environment variable also called `JWT_SECRET`.
+8. Create a [Capella account](https://cloud.couchbase.com/sign-up).
+  a. Couchbase offer a free tier version of Capella. If you want to explore Capella, check out it’s [offical docs](https://docs.couchbase.com/cloud/get-started/intro.html).
+9. Create and configure a Capella cluster.
+  a. Under `Operational`, create a new cluster.
+  b. Select Free Cluster, give it a name, select your CSP preferences and hit `Create Cluster`.
+  c. Once the Cluster is deployed, go into it. Under `Data Tools` you will find an example data bucket called `travel-sample`. Delete it.
+10.	Create and configure a bucket (This will be automated in stage 4).
+  a. We’re going to create a new bucket. Hit Create and create a new bucket called `conduit_bucket`. You can leave the Memory Quota at 100 MiB. Select `Use system generated _default for scope and collection`. Capella requires these for a bucket to be linkable to App Services.
+  b. In the remote repo, set `conduit_bucket` as a repository variable called `DB_BUCKET_NAME`.
+  c. Also in the local .env file, set `conduit_bucket` as the environment variable also called `DB_BUCKET_NAME`.
+11.	Create and configure a scope (This will be automated in stage 4).
+  a. Using the `Create` button, create a scope, `development`, inside `conduit_bucket` and two collections, `article`, `comment` and `user`*, inside of `development`.
+    *Couchbase has a list keywords that are reserved words. `user` is a reserved keyword, this can be escaped by encasing the name in backticks (`).
+  b. For indexing, open `Query` under `Data Tools`. Run the following queries in the query box: 
+  ```
+  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`article`;
+  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`user`;
+  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`comment`;
+  ```
+  c. In the remote repo, set `development` as a development environment variable called `DB_SCOPE_NAME`.
+  d. Also in the local `.env` file, set `development` as the environment variable also called `DB_SCOPE_NAME`.
+12. Configure cluster connection.
+  a. Open `SDKs` under `Connect`.
+  b. Copy the public connection string to the remote repo, into a repository var `DB_CONN_STR`.
+  c. Copy the public connection string and add it as `DB_CONN_STR` in the local `.env` file. d. Follow the `Allowed IP Addresses` link and add an allowed IP. Select `Allow Access From Anywhere`, this whitelists IP `0.0.0.0/0`*.
+    *(We do this to allow the GitHub runners, which work on varying IPs, to access the cluster when running the CI workflow. In Stage 4, we will run the CD workflow on a local runner, allowing for a more fine-tuned whitelist.)
+  e. Follow the `Database Access` link and create database access credentials.
+  f. Copy the Database Access Name and Password to the remote repo. Set the Database Access Name as a repository variable called `DB_USERNAME` and the Password as a repository secret called `DB_PASSWORD`.
+  g. Also copy the Database Access Name and Password to the local .env file. Set the Database Access Name as the environment variable `DB_USERNAME` and the Password as the environment variable `DB_PASSWORD`.
+  h. The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
+13.	Double check local and remote environment variables:
+| Local Repo Configuration            | Remote Repo Configuration            |
+|-------------------------------------|--------------------------------------|
+| **`.env` file:**                    | **Repository variables:**            |
+| `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |
+| `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |
+| `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |
+| `DB_BUCKET_NAME` = `conduit_bucket` | **Repository secrets:**              |
+| `DB_SCOPE_NAME` = `dev`             | `DB_PASSWORD` = <database access password> |
+| `JWT_SECRET` = <jwt secret string>  | **Dev environment variables:**       |
+| `CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200 | `DB_SCOPE_NAME` = `dev`              |
+| `CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS | **Dev environment secrets:**         |
+| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |
+
+14. [Optional] Set up Couchbase code editor extension.
+  a. Download the Couchbase extension in VS Code or IntelliJ IDEA.
+  b. Log in using details.
+  c. This integrates access to the cluster directly from the code editor.
+15. Test run.
+Run the following command and the API should connect itself to the Capella cluster and start up on `http://127.0.0.1:8000`:
+```
+./scripts/local/api-run.sh
+```
+Following the link should lead to a Swagger UI page titled FastAPI & Capella Conduit API (we will discuss this page further in this stage).
+
 ### Models and Schemas
 
 ### API Start Up
