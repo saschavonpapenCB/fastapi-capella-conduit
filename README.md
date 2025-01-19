@@ -8,9 +8,23 @@
 
 This codebase was created to demonstrate a fully fledged fullstack application built with [FastAPI](https://github.com/tiangolo/fastapi) + Couchbase Capella including CRUD operations, authentication, routing, pagination, and more.
 
+The [frontend] (https://github.com/AndyT2503/angular-conduit-signals), developed by another contributor, has been imported as a submodule to illustrate interactions and modularity between the frontend and backend.
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repository.
 
+---
+
+# Conduit API with FastAPI and Couchbase Capella
+
+## Table of Contents
+- [Introduction to RealWorld](#introductionRealWorld)
+- [Introduction to Capella](#introductionCapella)
+- [Project Outline](#projectoutline)
+- [Stage 1: Developing Conduit API with FastAPI and Capella](#stageone)
+- [Stage 2: Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite](#stagetwo)
+- [Stage 3: Containerizing Conduit with Docker](#stagethree)
+- [Stage 4: Infrastructure Automation with Terraform and Conduit Deployment to AWS](#stagefour)
+- [Summary](#summary)
 
 ## Prerequisites
 
@@ -19,30 +33,24 @@ To run this prebuilt project, you will need:
 - [Couchbase Capella](https://www.couchbase.com/products/capella/) cluster with a bucket and scope loaded.
 - [Python](https://www.python.org/downloads/) 3.9 or higher installed
   - Ensure that the Python version is [compatible](https://docs.couchbase.com/python-sdk/current/project-docs/compatibility.html#python-version-compat) with the Couchbase SDK.
-- Using the Capella UI, create the following collections in the loaded scope, and using the Query data tool, create primary indicies for both:
-  - `article`
-  - `client` (`client` because `user` is a reserved Couchbase keyword)
-```
-CREATE PRIMARY INDEX ON `default`:`<bucket_name>`.`<scope_name>`.`<collection_name>`;
-```
-
-# Setting Up the Application
-
-### Cloning Repository
-
+- Clone the repository.
 ```
 git clone https://github.com/couchbase-examples/python-quickstart-fastapi.git
 ```
+
+This project can be deployed locally, containerised locally or containerised remotely (AWS):
+
+# Local Deployment
 
 ### Install Dependencies
 
 The dependencies for the application are specified in the `requirements.txt` file in the root folder. Dependencies can be installed through `pip` the default package manager for Python.
 ```
-./scripts/install-dependencies.sh
+sh ./scripts/install-dependencies.sh
 ```
 > Note: If your Python is not symbolically linked to python3, you need to run all commands using `python3` instead of `python`.
 
-### Setup Database Configuration
+### Manual Database Configuration Setup
 
 To know more about connecting to your Capella cluster, please follow the [instructions](https://docs.couchbase.com/cloud/get-started/connect.html).
 
