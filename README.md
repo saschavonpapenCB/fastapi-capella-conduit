@@ -66,14 +66,13 @@ To prepare for this stage, follow these steps:
 2. Install a version of Python [compatible with the Couchbase Python SDK](https://docs.couchbase.com/python-sdk/current/project-docs/compatibility.html#python-version-compat).
 3. Create a new Python virtual environment Refer to resources like the [official Python docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments) for guidance.
 4. Install Python dependencies. This can be achieved by running this command:
-```
-./scripts/local/install-api-deps.sh
-```
+  ```sh
+  ./scripts/local/install-api-deps.sh
+  ```
 5. Create a remote origin repo in GitHub. This will be for executing the CI workflow.
   a. Create a remote repo in GitHub and as the local repo’s origin.
   b. In `Environments` under `Settings`, create an environment called `development` and leave all of the configurations as default (repository and environment variables and secrets will be added in coming steps).
-6. Set up .env file. There are two `.env.example` files in the project, one in the root directory one in the `/api` directory. The one in the root directory is used by the infrastructure described in Stage 4 (wait until then to implement). The one in the `/api` directory is used by the Conduit API and needs to be implemented in this step.
-The `.env.example` file is an example layout for a `.env` file, which will contain all of the environment variables. This file will be ignored by the `.gitignore` file and keep the `env` variables local, when the API is run in the CI workflow on GitHub, it will use the environment variables defined there (also implemented in later steps).
+6. Set up .env file. There are two `.env.example` files in the project, one in the root directory one in the `/api` directory. The one in the root directory is used by the infrastructure described in Stage 4 (wait until then to implement). The one in the `/api` directory is used by the Conduit API and needs to be implemented in this step. The `.env.example` file is an example layout for a `.env` file, which will contain all of the environment variables. This file will be ignored by the `.gitignore` file and keep the `env` variables local, when the API is run in the CI workflow on GitHub, it will use the environment variables defined there (also implemented in later steps).
   a. Change the root directory `.env` file name from `.env.example` to `.env`.
   b. Leave the CORS variables as is. The remaining variables will be added in coming steps.
 7. Configure JWT settings.
