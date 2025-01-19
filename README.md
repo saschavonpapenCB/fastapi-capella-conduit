@@ -18,12 +18,12 @@ For more information on how to this works with other frontends/backends, head ov
 
 ## Table of Contents
 - [Introduction to RealWorld](#introduction-to-realworld)
-- [Introduction to Capella](#introductionCapella)
-- [Project Outline](#projectoutline)
-- [Stage 1: Developing Conduit API with FastAPI and Capella](#stageone)
-- [Stage 2: Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite](#stagetwo)
-- [Stage 3: Containerizing Conduit with Docker](#stagethree)
-- [Stage 4: Infrastructure Automation with Terraform and Conduit Deployment to AWS](#stagefour)
+- [Introduction to Capella](#introduction-to-capella)
+- [Project Outline](#project-outline)
+- [Stage 1: Developing Conduit API with FastAPI and Capella](#stage-1)
+- [Stage 2: Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite](#stage-2)
+- [Stage 3: Containerizing Conduit with Docker](#stage-3)
+- [Stage 4: Infrastructure Automation with Terraform and Conduit Deployment to AWS](#stage-4)
 - [Summary](#summary)
 
 ## Introduction to RealWorld
@@ -58,6 +58,25 @@ Stage 4 automates infrastructure setup and deployment of the Conduit application
 - The Continuous Deployment (CD) pipeline for automatic updates.
 - The Teardown (TD) pipeline for efficient resource cleanup.
 The Staging environment serves as a deployment testing ground, using the CD pipeline to deploy the application and run CI tests. Once validated, the Production environment follows the same process to deploy the application for end users. The CD pipeline, using [Terraform](https://www.terraform.io/) and [Couchbase Shell](https://couchbase.sh/), provisions necessary AWS and Capella resources. Docker builds, tags, and pushes Conduit images to [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), which [Amazon Elastic Container Service (ECS)](https://aws.amazon.com/ecs/) then pulls to update running containers, keeping deployments current. Finally, the TD pipeline dismantles infrastructure when deployments are ended, deprovisioning AWS and Capella resources efficiently.
+
+---
+# Stage 1
+## Developing Conduit API with FastAPI and Capella
+
+---
+# Stage 2
+## Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite
+
+---
+# Stage 3
+## Containerizing Conduit with Docker
+
+---
+# Stage 4
+## Infrastructure Automation with Terraform and Conduit Deployment to AWS
+
+---
+# Summary
 
 ## Prerequisites
 
