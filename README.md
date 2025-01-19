@@ -8,10 +8,9 @@
 
 This codebase was created to demonstrate a fully fledged fullstack application built with [FastAPI](https://github.com/tiangolo/fastapi) + Couchbase Capella including CRUD operations, authentication, routing, pagination, and more.
 
-The [frontend] (https://github.com/AndyT2503/angular-conduit-signals), developed by another contributor, has been imported as a submodule to illustrate interactions and modularity between the frontend and backend.
+The frontend ([AndyT2503/angular-conduit-signals](https://github.com/AndyT2503/angular-conduit-signals)), developed by another contributor, has been imported as a submodule to illustrate interactions and modularity between the frontend and backend.
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repository.
-
 ---
 
 # Conduit API with FastAPI and Couchbase Capella
@@ -58,12 +57,18 @@ Stage 4 automates infrastructure setup and deployment of the Conduit application
 - The Continuous Deployment (CD) pipeline for automatic updates.
 - The Teardown (TD) pipeline for efficient resource cleanup.
 The Staging environment serves as a deployment testing ground, using the CD pipeline to deploy the application and run CI tests. Once validated, the Production environment follows the same process to deploy the application for end users. The CD pipeline, using [Terraform](https://www.terraform.io/) and [Couchbase Shell](https://couchbase.sh/), provisions necessary AWS and Capella resources. Docker builds, tags, and pushes Conduit images to [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), which [Amazon Elastic Container Service (ECS)](https://aws.amazon.com/ecs/) then pulls to update running containers, keeping deployments current. Finally, the TD pipeline dismantles infrastructure when deployments are ended, deprovisioning AWS and Capella resources efficiently.
-
 ---
 # Stage 1
 ## Developing Conduit API with FastAPI and Capella
 ### Preparation
-
+To prepare for this stage, follow these steps:
+1. Clone the codebase to a local repo.
+2. Install a version of Python [compatible with the Couchbase Python SDK](https://docs.couchbase.com/python-sdk/current/project-docs/compatibility.html#python-version-compat).
+3. Create a new Python virtual environment Refer to resources like the [official Python docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments) for guidance.
+4. Install Python dependencies. This can be achieved by running this command:
+```
+./scripts/local/install-api-deps.sh
+```
 ### Models and Schemas
 
 ### API Start Up
@@ -77,7 +82,6 @@ The Staging environment serves as a deployment testing ground, using the CD pipe
 ### Local Testing
 
 ### CI Pipeline
-
 ---
 # Stage 2
 ## Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite
@@ -90,7 +94,6 @@ The Staging environment serves as a deployment testing ground, using the CD pipe
 ### Cypress E2E Testing
 
 ### Integrating E2E Testing into CI Workflow
-
 ---
 # Stage 3
 ## Containerizing Conduit with Docker
@@ -101,7 +104,6 @@ The Staging environment serves as a deployment testing ground, using the CD pipe
 ### Containerizing the E2E Testing
 
 ### Composing Containers
-
 ---
 # Stage 4
 ## Infrastructure Automation with Terraform and Conduit Deployment to AWS
@@ -118,7 +120,6 @@ The Staging environment serves as a deployment testing ground, using the CD pipe
 ### CD Pipeline
 
 ### TD Pipeline
-
 ---
 # Summary
 
