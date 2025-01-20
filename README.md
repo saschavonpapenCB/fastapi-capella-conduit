@@ -178,7 +178,7 @@ Conduit also represents schemas in JSON form and uses them for input (creating a
 For this stage, we will be primarily using the `/api` directory:
 
 <div align="center">
-  <img src="./images/Figure3.png" alt="Figure 3: API Directory" width="500">
+  <img src="./images/Figure3.png" alt="Figure 3: API Directory" width="800">
   <p><em>Figure 3: API Directory</em></p>
 </div>
 
@@ -206,7 +206,7 @@ However, FastAPI APIs automatically provides Swagger, an interactive documentati
 Note: Swagger UI’s authorization module is not compatible with this project and does not function correctly (refer to the **Security** section for details).
 
 <div align="center">
-  <img src="./images/Figure4.png" alt="Figure 4: API Endpoints" width="500">
+  <img src="./images/Figure4.png" alt="Figure 4: API Endpoints" width="800">
   <p><em>Figure 4: API Endpoints</em></p>
 </div>
 
