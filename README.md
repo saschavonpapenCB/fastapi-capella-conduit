@@ -281,6 +281,7 @@ As previously mentioned, RealWorld provides a Postman test collection for Condui
 
 ### CI Pipeline
 The Continuous Integration (CI) pipeline is set up as a workflow in GitHub Actions and will be built upon in later stages, with a complementary Continuous Deployment (CD) pipeline introduced in stage 4. This CI pipeline runs the local tests as well as a codebase linter: GitHub’s super-linter.
+
 ---
 
 # Stage 2
