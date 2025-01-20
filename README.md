@@ -114,18 +114,18 @@ To prepare for this stage, follow these steps:
   - Also copy the Database Access Name and Password to the local .env file. Set the Database Access Name as the environment variable `DB_USERNAME` and the Password as the environment variable `DB_PASSWORD`.
   - The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
 13.	Double check local and remote environment variables:\
-| Local Repo Configuration            | Remote Repo Configuration            |
-|-------------------------------------|--------------------------------------|
-| **`.env` file:**                    | **Repository variables:**            |
-| `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |
-| `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |
-| `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |
-| `DB_BUCKET_NAME` = `conduit_bucket` | **Repository secrets:**              |
-| `DB_SCOPE_NAME` = `dev`             | `DB_PASSWORD` = <database access password> |
-| `JWT_SECRET` = <jwt secret string>  | **Dev environment variables:**       |
-| `CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200 | `DB_SCOPE_NAME` = `dev`              |
-| `CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS | **Dev environment secrets:**         |
-| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |
+| Local Repo Configuration            | Remote Repo Configuration            |\
+|-------------------------------------|--------------------------------------|\
+| **`.env` file:**                    | **Repository variables:**            |\
+| `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |\
+| `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |\
+| `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |\
+| `DB_BUCKET_NAME` = `conduit_bucket` | **Repository secrets:**              |\
+| `DB_SCOPE_NAME` = `dev`             | `DB_PASSWORD` = <database access password> |\
+| `JWT_SECRET` = <jwt secret string>  | **Dev environment variables:**       |\
+| `CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200 | `DB_SCOPE_NAME` = `dev`              |\
+| `CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS | **Dev environment secrets:**         |\
+| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |\
 
 14. [Optional] Set up Couchbase code editor extension.
   - Download the Couchbase extension in VS Code or IntelliJ IDEA.
