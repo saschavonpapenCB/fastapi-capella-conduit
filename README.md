@@ -115,6 +115,10 @@ To prepare for this stage, follow these steps:
   - The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
 13.	Double check local and remote environment variables:
 
+|       Local Repo Configuration      |
+|-------------------------------------|
+| **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_PASSWORD` = &lt;database access password&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br>`DB_SCOPE_NAME` = `dev`<br>`JWT_SECRET` = &lt;jwt secret string&gt;<br>`CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200<br>`CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS<br>`CORS_ALLOWED_HEADERS` = Content-Type,Authorization | 
+
 | Local Repo Configuration            | Remote Repo Configuration            |
 |-------------------------------------|--------------------------------------|
 | **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;                   | **Repository variables:**            |
