@@ -138,7 +138,26 @@ Run the following command and the API should connect itself to the Capella clust
     Following the link should lead to a Swagger UI page titled FastAPI & Capella Conduit API (we will discuss this page further in this stage).
 
 ### Models and Schemas
+Before starting the API, we need to understand how Conduit represents its data as objects. In Conduit, objects are distinct entities within the system, such as Users, Articles, and Comments.
 
+| Object **models** act as blueprints that outline the attributes of these objects. For instance, a model might specify that an object, like a food item, has a flavor. **Schemas** then provide detailed descriptions of these attributes, such as stating that a particular food has a ‘sweet’ flavor. While **models** establish the overall structure of the objects, **schemas** provide the specific details about each attribute. |
+
+A model can **embed** or **refer** to another model as one of its attributes. This establishes a relationship between objects. Conduit has the following examples of this:
+
+<u>An article object:</u>
+1. Embeds a User object in its `author` attribute.
+2. Can refer to multiple User objects in its `favoritedUserIds` attribute.
+3. Can refer to multiple Comment objects in its `commentIds` attribute.
+<u>A comment object:</u>
+1. Embeds a User object in its `author` attribute.
+<u>A user object:</u>
+1. Can refer to multiple User objects in its `followingIds`.
+
+These relationships define the object relational structure illustrated in Figure 1:
+<div align="center">
+  <img src="./images/Figure1.png" alt="Figure 1: Object relational structure" width="300">
+  <p><em>Figure 1: Object relational structure</em></p>
+</div>
 
 ### API Start Up
 
