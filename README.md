@@ -117,33 +117,14 @@ To prepare for this stage, follow these steps:
 
 |       Local Repo Configuration      |
 |-------------------------------------|
-| **`.env` file:**<br>
-`DB_CONN_STR` = &lt;capella connection string&gt;<br>
-`DB_PASSWORD` = &lt;database access password&gt;<br>
-`DB_USERNAME` = &lt;database access username&gt;<br>
-`DB_BUCKET_NAME` = `conduit_bucket`<br>
-`DB_SCOPE_NAME` = `dev`<br>
-`JWT_SECRET` = &lt;jwt secret string&gt;<br>
-`CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200<br>
-`CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS<br>
-`CORS_ALLOWED_HEADERS` = Content-Type,Authorization | 
+| **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_PASSWORD` = &lt;database access password&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br>`DB_SCOPE_NAME` = `dev`<br>`JWT_SECRET` = &lt;jwt secret string&gt;<br>`CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200<br>`CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS<br>`CORS_ALLOWED_HEADERS` = Content-Type,Authorization | 
 
 |      Remote Repo Configuration      |
 |-------------------------------------|
-| **Repository variables:**<br> |
-
-| Local Repo Configuration            | Remote Repo Configuration            |
-|-------------------------------------|--------------------------------------|
-| **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;                   | **Repository variables:**            |
-| `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |
-| `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |
-| `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |
-| `DB_BUCKET_NAME` = `conduit_bucket` | **Repository secrets:**              |
-| `DB_SCOPE_NAME` = `dev`             | `DB_PASSWORD` = <database access password> |
-| `JWT_SECRET` = <jwt secret string>  | **Dev environment variables:**       |
-| `CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200 | `DB_SCOPE_NAME` = `dev`              |
-| `CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS | **Dev environment secrets:**         |
-| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |
+| **Repository variables:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br> |
+| **Repository secrets:**<br>`DB_PASSWORD` = &lt;database access password&gt;<br> |
+| **Dev environment variables:**<br>`DB_SCOPE_NAME` = `dev` |
+| **Dev environment secrets:**<br>`JWT_SECRET` = &lt;jwt secret string&gt; |
 
 14. [Optional] Set up Couchbase code editor extension.
   - Download the Couchbase extension in VS Code or IntelliJ IDEA.
