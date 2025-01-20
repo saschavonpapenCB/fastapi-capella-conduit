@@ -144,13 +144,13 @@ Before starting the API, we need to understand how Conduit represents its data a
 
 A model can **embed** or **refer** to another model as one of its attributes. This establishes a relationship between objects. Conduit has the following examples of this:
 
-**An article object:**\
+**An article object:**
 1. Embeds a User object in its `author` attribute.
 2. Can refer to multiple User objects in its `favoritedUserIds` attribute.
-3. Can refer to multiple Comment objects in its `commentIds` attribute.
-**A comment object:**\
-1. Embeds a User object in its `author` attribute.
-**A user object:**\
+3. Can refer to multiple Comment objects in its `commentIds` attribute.\
+**A comment object:**
+1. Embeds a User object in its `author` attribute.\
+**A user object:**
 1. Can refer to multiple User objects in its `followingIds`.
 
 These relationships define the object relational structure illustrated in Figure 1:
