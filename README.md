@@ -93,27 +93,27 @@ To prepare for this stage, follow these steps:
   - In the remote repo, set `conduit_bucket` as a repository variable called `DB_BUCKET_NAME`.
   - Also in the local .env file, set `conduit_bucket` as the environment variable also called `DB_BUCKET_NAME`.
 11.	Create and configure a scope (This will be automated in stage 4).
-  - Using the `Create` button, create a scope, `development`, inside `conduit_bucket` and two collections, `article`, `comment` and `user`*, inside of `development`.
+  - Using the `Create` button, create a scope, `development`, inside `conduit_bucket` and two collections, `article`, `comment` and `user`*, inside of `development`.\
     *Couchbase has a list keywords that are reserved words. `user` is a reserved keyword, this can be escaped by encasing the name in backticks (`).
   - For indexing, open `Query` under `Data Tools`. Run the following queries in the query box: 
-  ```
-  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`article`;
-  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`user`;
-  CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`comment`;
-  ```
+    ```sh
+    CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`article`;
+    CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`user`;
+    CREATE PRIMARY INDEX ON `default`:`conduit_bucket`.`development`.`comment`;
+    ```
   - In the remote repo, set `development` as a development environment variable called `DB_SCOPE_NAME`.
   - Also in the local `.env` file, set `development` as the environment variable also called `DB_SCOPE_NAME`.
 12. Configure cluster connection.
   - Open `SDKs` under `Connect`.
   - Copy the public connection string to the remote repo, into a repository var `DB_CONN_STR`.
   - Copy the public connection string and add it as `DB_CONN_STR` in the local `.env` file.
-  - Follow the `Allowed IP Addresses` link and add an allowed IP. Select `Allow Access From Anywhere`, this whitelists IP `0.0.0.0/0`*.
+  - Follow the `Allowed IP Addresses` link and add an allowed IP. Select `Allow Access From Anywhere`, this whitelists IP `0.0.0.0/0`*.\
     *(We do this to allow the GitHub runners, which work on varying IPs, to access the cluster when running the CI workflow. In Stage 4, we will run the CD workflow on a local runner, allowing for a more fine-tuned whitelist.)
   - Follow the `Database Access` link and create database access credentials.
   - Copy the Database Access Name and Password to the remote repo. Set the Database Access Name as a repository variable called `DB_USERNAME` and the Password as a repository secret called `DB_PASSWORD`.
   - Also copy the Database Access Name and Password to the local .env file. Set the Database Access Name as the environment variable `DB_USERNAME` and the Password as the environment variable `DB_PASSWORD`.
   - The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
-13.	Double check local and remote environment variables:
+13.	Double check local and remote environment variables:\
 | Local Repo Configuration            | Remote Repo Configuration            |
 |-------------------------------------|--------------------------------------|
 | **`.env` file:**                    | **Repository variables:**            |
