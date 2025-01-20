@@ -125,7 +125,7 @@ To prepare for this stage, follow these steps:
 | `JWT_SECRET` = <jwt secret string>  | **Dev environment variables:**       |\
 | `CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200 | `DB_SCOPE_NAME` = `dev`              |\
 | `CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS | **Dev environment secrets:**         |\
-| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |\
+| `CORS_ALLOWED_HEADERS` = Content-Type,Authorization | `JWT_SECRET` = <jwt secret string>  |
 
 14. [Optional] Set up Couchbase code editor extension.
   - Download the Couchbase extension in VS Code or IntelliJ IDEA.
