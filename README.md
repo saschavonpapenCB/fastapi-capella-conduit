@@ -117,7 +117,7 @@ To prepare for this stage, follow these steps:
 
 | Local Repo Configuration            | Remote Repo Configuration            |
 |-------------------------------------|--------------------------------------|
-| **`.env` file:** \ `DB_CONN_STR` = <capella connection string>                   | **Repository variables:**            |
+| **`.env` file:**\ `DB_CONN_STR` = <capella connection string>                   | **Repository variables:**            |
 | `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |
 | `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |
 | `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |
