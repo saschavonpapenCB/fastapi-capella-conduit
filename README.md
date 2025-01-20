@@ -161,6 +161,18 @@ These relationships define the object relational structure illustrated in Figure
   <p><em>Figure 1: Object relational structure</em></p>
 </div>
 
+Conduit represents object models in JSON form and uses them for processing by the API and storing in the Capella database.
+
+An object’s attributes can be defined or described by a schema. There are typically multiple types of schemas for each object, *each one outlining only the attributes relevant to the specific use case*.
+
+Figure 2 maps the schemas relating to article objects:
+<div align="center">
+  <img src="./images/Figure2.png" alt="Figure 2: Article schemas" width="500">
+  <p><em>Figure 2: Article schemas</em></p>
+</div>
+
+Conduit also represents schemas in JSON form and uses them for input (creating and updating) and output (displaying) to and from the API.
+
 ### API Start Up
 
 ### API Database
