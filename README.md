@@ -175,16 +175,114 @@ Conduit also represents schemas in JSON form and uses them for input (creating a
 
 ### API Start Up
 
+For this stage, we will be primarily using the `/api` directory:
+
+<div align="center">
+  <img src="./images/Figure3.png" alt="Figure 3: API Directory" width="500">
+  <p><em>Figure 3: API Directory</em></p>
+</div>
+
+When the `start-api.sh` script runs, it launches Uvicorn, a fast ASGI server. Uvicorn then loads the FastAPI application from the `api.main` module, where it is defined as `api`. The FastAPI framework initializes by configuring the Capella database connection, setting up routing, applying middleware and other components defined within the `api` instance, readying the applicating to handle incoming HTTP requests.
+
 ### API Database
+The Capella database integrates into Conduit via the Capella SDK, enabling interactions with the FastAPI framework. This setup facilitates key-value storage, querying, and schema processing for objects like users, articles, and comments.
+
+**Key Features:**
+- Capella SDK: Establishes database connections for inserting, updating, and retrieving JSON-serialized objects, ensuring API-database consistency.
+- Key-Value Operations: Each object (e.g., `user:<id>`, `article:<slug>`) is stored with unique keys for low-latency access via get and set methods.
+- Querying: Capella's indexing supports advanced queries, such as retrieving comments for an article or users favoriting a specific article.
+- Schema Alignment: FastAPI’s Pydantic models define request/response schemas consistent with Capella’s document structure.
+
+**Extensibility:**
+Comment Pagination Pagination for comments can improve performance by limiting results per request. Enhancing the `/articles/{slug}/comments` endpoint with parameters like `?page=2&limit=10` would involve:
+- Updating Capella queries with offset and limit.
+- Adding metadata (e.g., current page, total comments) to the response schema.
 
 ### API Endpoints
+API routers are accessed via HTTP requests made by clients or other services that interact programmatically with the application. Typically, these endpoints are not directly accessible through a browser because they are designed to handle programmatic requests and are often secured with authentication and authorization mechanisms.
+
+However, FastAPI APIs automatically provides Swagger, an interactive documentation UI, allowing for exploration and testing of the API endpoints. This user-friendly documentation can be accessed via the  `/docs` endpoint, and the root endpoint `/` is configured to redirect to `/docs` automatically.
+
+Note: Swagger UI’s authorization module is not compatible with this project and does not function correctly (refer to the **Security** section for details).
+
+<div align="center">
+  <img src="./images/Figure4.png" alt="Figure 4: API Endpoints" width="500">
+  <p><em>Figure 4: API Endpoints</em></p>
+</div>
 
 ### Security
+RealWorld's security for Conduit relies on the use of JSON Web Tokens (JWTs), which are a secure way to transmit information between two parties through a digitally signed token. In this system, a JWT functions like an access key, granting clients the ability to interact with protected API endpoints. This ensures that only authenticated and authorized clients can access secure areas of the application. The following steps illustrate how JWTs are used for authentication and authorization in this process:
+
+<div align="center">
+  <img src="./images/Figure5.png" alt="Figure 5: Authorized Request" width="500">
+  <p><em>Figure 5: Authorized Request</em></p>
+</div>
+
+1. The client POST requests the user’s username and password to the `login_user` endpoint.
+2. The API authenticates the client.
+3. The API generates an access token (JWT).
+4. The API responses with status `200 OK` and the access token.
+5. The client stores the access token in local storage.
+6. All future client requests include the access token in an `Authorization` header.
+7. The API decodes the access token and authenticates the client.
+8. The API processes the request (e.g., creating a new article).
+9. The API responds with status `200 OK`.
+
+In step 3, the API generates the access token using the `create_access_token` function. The function first defines the token's payload, which includes the user's username and an expiration time set by the `ACCESS_TOKEN_EXPIRE_MINUTES` variable. This payload is then serialized into a JSON string and encoded using the HS256 algorithm, along with a secret key provided by the `SECRET_KEY` environment variable. The resulting encoded JWT is returned as a string, ready to be sent to the client for authentication purposes. The secret key, token expiration and HS256 algorithm are configured in the `settings.py` file.
+
+Another possible scenario is depicted below:
+
+<div align="center">
+  <img src="./images/Figure6.png" alt="Figure 6: Unauthorized Request" width="500">
+  <p><em>Figure 6: Unauthorized Request</em></p>
+</div>
+
+1. The client request does not include an access token in an `Authorization` header.
+2. The API does not authorize the client request.
+3. The API responds status `401 Unauthorized`.
+
+In Step 7 of Figure 4 and Step 2 of Figure 5, the API manages user authentication depending on whether the endpoint requires authorization. For all endpoints, except for the `register` and `login_user` functions, the API checks for a **current user instance**. If the endpoint requires authorization, it calls the `get_current_user_instance` function (e.g., for creating an article). For unauthorized endpoints, it uses the `get_current_user_optional_instance` function (e.g., for retrieving articles).
+
+These functions use the `OAUTH2_SCHEME` to extract the access token from the request’s Authorization header. They then decode the token using the HS256 algorithm and the secret key, followed by attempting to authenticate the user based on the username contained within the token. If authentication is successful, the user is returned as the **current user instance**, authorizing the client's request to be processed (as in Figure 4). However, if authentication fails, the **current user instance** is returned as `None`. For authorized endpoints, this results in the client’s request being denied and not processed (as shown in Figure 5).
+
+FastAPI provide a variety of OAUTH2 classes in its security module:
+```sh
+from fastapi.security import (
+  OAuth2,
+  OAuth2AuthorizationCodeBearer,
+  OAuth2PasswordBearer,
+  OAuth2PasswordRequestForm,
+  OAuth2PasswordRequestFormStrict,
+)
+```
+
+The `OAuth2PasswordBearer` class would have been ideal for our use case, as it extracts the access token from the `Authorization` header formatted as:`Authorization: Bearer {{token}}`.
+
+However, our RealWorld API specifications require tokens to be extracted from headers formatted as: `Authorization: Token {{token}}`.
+
+Due to this formatting discrepancy, `OAuth2PasswordBearer` was not suitable. Therefore, a custom scheme, `OAuth2TokenBearer`, was implemented. This custom scheme, based on the `OAuth2` security class, was designed to work like `OAuthPasswordBearer` but handles headers with the `Token` prefix rather than `Bearer`. It can be found in the `utils/security.py` file.
+
+Due to this custom header format, Swagger UI’s built-in authorization features are not compatible. Swagger UI supports Bearer token authentication by default but does not handle custom token prefixes like `Token` out-of-the-box. While custom Swagger extensions or a bespoke documentation UI could potentially address this issue, it is not necessary for the Conduit project. As such, Swagger UI remains useful for documentation purposes but will always indicate unauthorized requests.
+
+For testing API requests, Postman was used, which handles the custom token format seamlessly. RealWorld utilized Postman for their Conduit API testing collection, making it an effective tool for working with the custom token scheme in practice.
 
 ### Local Testing
+RealWorld requires demonstration of unit testing for Conduit implementations. Since FastAPI is written in Python, PyTest is the natural choice. A demo unit test, which uses mock data instead of a real database, is found in the `/api/test` directory.
+
+To run the PyTest unit tests against the API, start the API and run the following script:
+```sh
+./scripts/local/pytest-test.sh
+```
+
+As previously mentioned, RealWorld provides a Postman test collection for Conduit’s API specifications. You can find this collection in the `realworld @ 11c81f6` submodule, [here](https://github.com/gothinkster/realworld/tree/11c81f64f04fff8cfcd60ddf4eb0064c01fa1730/api). To run the Postman API test collection, start the API and run:
+```sh
+./scripts/local/realworld-test.sh
+```
 
 ### CI Pipeline
+The Continuous Integration (CI) pipeline is set up as a workflow in GitHub Actions and will be built upon in later stages, with a complementary Continuous Deployment (CD) pipeline introduced in stage 4. This CI pipeline runs the local tests as well as a codebase linter: GitHub’s super-linter.
 ---
+
 # Stage 2
 ## Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite
 ### Preparation
