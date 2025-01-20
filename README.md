@@ -115,16 +115,16 @@ To prepare for this stage, follow these steps:
   - The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
 13.	Double check local and remote environment variables:
 
-|       Local Repo Configuration      |
-|-------------------------------------|
-| **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_PASSWORD` = &lt;database access password&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br>`DB_SCOPE_NAME` = `dev`<br>`JWT_SECRET` = &lt;jwt secret string&gt;<br>`CORS_ALLOWED_ORIGINS` = http://127.0.0.1,http://localhost:4200<br>`CORS_ALLOWED_METHODS` = GET,POST,PUT,DELETE,OPTIONS<br>`CORS_ALLOWED_HEADERS` = Content-Type,Authorization | 
+    |       Local Repo Configuration      |
+    |-------------------------------------|
+    | **`.env` file:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_PASSWORD` = &lt;database access password&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br>`DB_SCOPE_NAME` = `dev`<br>`JWT_SECRET` = &lt;jwt secret string&gt;<br>`CORS_ALLOWED_ORIGINS` = `http://127.0.0.1`,`http://localhost:4200`<br>`CORS_ALLOWED_METHODS` = `GET`,`POST`,`PUT`,`DELETE`,`OPTIONS`<br>`CORS_ALLOWED_HEADERS` = `Content-Type`,`Authorization` | 
 
-|      Remote Repo Configuration      |
-|-------------------------------------|
-| **Repository variables:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br> |
-| **Repository secrets:**<br>`DB_PASSWORD` = &lt;database access password&gt;<br> |
-| **Dev environment variables:**<br>`DB_SCOPE_NAME` = `dev` |
-| **Dev environment secrets:**<br>`JWT_SECRET` = &lt;jwt secret string&gt; |
+    |      GitHub Repo Configuration      |
+    |-------------------------------------|
+    | **Repository variables:**<br>`DB_CONN_STR` = &lt;capella connection string&gt;<br>`DB_USERNAME` = &lt;database access username&gt;<br>`DB_BUCKET_NAME` = `conduit_bucket`<br> |
+    | **Repository secrets:**<br>`DB_PASSWORD` = &lt;database access password&gt;<br> |
+    | **Dev environment variables:**<br>`DB_SCOPE_NAME` = `dev` |
+    | **Dev environment secrets:**<br>`JWT_SECRET` = &lt;jwt secret string&gt; |
 
 14. [Optional] Set up Couchbase code editor extension.
   - Download the Couchbase extension in VS Code or IntelliJ IDEA.
@@ -132,12 +132,13 @@ To prepare for this stage, follow these steps:
   -  This integrates access to the cluster directly from the code editor.
 15. Test run.
 Run the following command and the API should connect itself to the Capella cluster and start up on `http://127.0.0.1:8000`:
-```
-./scripts/local/api-run.sh
-```
+  ```sh
+  ./scripts/local/api-run.sh
+  ```
 Following the link should lead to a Swagger UI page titled FastAPI & Capella Conduit API (we will discuss this page further in this stage).
 
 ### Models and Schemas
+
 
 ### API Start Up
 
