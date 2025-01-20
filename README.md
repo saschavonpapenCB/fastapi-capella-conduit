@@ -113,11 +113,11 @@ To prepare for this stage, follow these steps:
   - Copy the Database Access Name and Password to the remote repo. Set the Database Access Name as a repository variable called `DB_USERNAME` and the Password as a repository secret called `DB_PASSWORD`.
   - Also copy the Database Access Name and Password to the local .env file. Set the Database Access Name as the environment variable `DB_USERNAME` and the Password as the environment variable `DB_PASSWORD`.
   - The remaining steps shown aren’t necessary for preparing this stage but are worth exploring.
-13.	Double check local and remote environment variables:\
+13.	Double check local and remote environment variables:
 
 | Local Repo Configuration            | Remote Repo Configuration            |
 |-------------------------------------|--------------------------------------|
-| **`.env` file:**                    | **Repository variables:**            |
+| **`.env` file:** \ `DB_CONN_STR` = <capella connection string>                   | **Repository variables:**            |
 | `DB_CONN_STR` = <capella connection string> | `DB_CONN_STR` = <capella connection string> |
 | `DB_PASSWORD` = <database access password> | `DB_BUCKET_NAME` = `conduit_bucket` |
 | `DB_USERNAME` = <database access username> | `DB_USERNAME` = <database access username> |
