@@ -132,10 +132,10 @@ To prepare for this stage, follow these steps:
   -  This integrates access to the cluster directly from the code editor.
 15. Test run.
 Run the following command and the API should connect itself to the Capella cluster and start up on `http://127.0.0.1:8000`:
-  ```sh
-  ./scripts/local/api-run.sh
-  ```
-Following the link should lead to a Swagger UI page titled FastAPI & Capella Conduit API (we will discuss this page further in this stage).
+    ```sh
+    ./scripts/local/api-run.sh
+    ```
+    Following the link should lead to a Swagger UI page titled FastAPI & Capella Conduit API (we will discuss this page further in this stage).
 
 ### Models and Schemas
 
