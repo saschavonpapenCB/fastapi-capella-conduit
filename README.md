@@ -287,144 +287,291 @@ The Continuous Integration (CI) pipeline is set up as a workflow in GitHub Actio
 # Stage 2
 ## Integrating Frontend for Full-stack Conduit with Cypress E2E Testing Suite
 ### Preparation
+To prepare for this stage, follow these steps:
+1. Install the frontend dependencies.
+  Run the following in the `/angular-conduit-signals` directory:
+  ```sh
+  ./scripts/local/install-fe-deps.sh
+  ```
+
+2. Test run frontend
+  This will serve the Angular files on `localhost`, making them accessible in your browser. Run the following in the `/angular-conduit-signals` directory:
+  ```sh
+  ./scripts/local/start-fe.sh
+  ```
+
+3.	Test run
+  Cypress This will launch Cypress. Choose E2E testing and select your preferred browser. Cypress will automatically execute a test that is expected to fail at this point. Run the following in the `/angular-conduit-signals` directory:
+  ```sh
+  ./scripts/local/cypress-test.sh
+  ```
 
 ### Selecting and Integrating a Frontend
+Conduit is designed with modularity in mind. If a Conduit API implementation passes all the required tests, it should be able to integrate seamlessly with any Conduit frontend implementation, regardless of the framework it’s built with.
+
+The RealWorld CodebaseShow, provides a comprehensive list of publicly available Conduit implementations, including various frontend, backend, and full-stack versions. For this project, we selected an Angular implementation by AndyT2503:
+
+[AndyT2503/angular-conduit-signals](https://github.com/AndyT2503/angular-conduit-signals)
+
+Before integrating this frontend implementation as a submodule, it required some modifications. To facilitate this, we first forked the repository and created a new version:
+
+[saschavonpapenCB/angular-conduit-signals](https://github.com/saschavonpapenCB/angular-conduit-signals)
+
+<div align="center">
+  <img src="./images/Figure7.jpg" alt="Figure 7: GitHub Repo Map" width="500">
+  <p><em>Figure 7: GitHub Repo Map</em></p>
+</div>
 
 ### Full-Stack Conduit
+To enable the frontend to interact with our API, we reconfigured the frontend configuration in the `src/assets/config/app-config.json` to match our API implementation’s URL.
+
+And we have a full-stack Conduit application! Start the frontend and the API in separate processes and navigate to the frontend in a browser:
+```sh
+./scripts/local/start-api.sh
+./scripts/local/start-fe.sh
+```
+
+The frontend should now interact with the API and make requests to its endpoints successfully.
 
 ### Cypress E2E Testing
+The next step is to implement End-to-End (E2E) testing with Cypress. E2E tests simulate real user interactions with the frontend, ensuring that all components work together as expected and that the application functions correctly from start to finish. This will help us identify any issues in the user flow and ensure a smooth, bug-free experience.
+
+NOTE: To ensure Cypress works correctly with the frontend, it was necessary to adjust the frontend configuration. Specifically, source mapping was disabled in the `tsconfig.json` file.
+
+<div align="center">
+  <img src="./images/Figure8.png" alt="Figure 8: Cypress directory" width="500">
+  <p><em>Figure 8: Cypress Directory</em></p>
+</div>
+
+The `/e2e` directory is where end-to-end (E2E) test files are stored, while the `/support` directory is used for defining custom commands. Static data files that are utilized in tests are kept in the `/fixtures` directory. Cypress also has the capability to record E2E tests, which is useful for reviewing test executions and diagnosing issues. These video recordings are saved in the `/videos` directory.
+
+To run Cypress against Conduit, first start the API and frontend, then, in a separate terminal, start Cypress by running:
+```sh
+./scripts/local/cypress-test.sh
+```
+
+In Cypress select `register-spec.cy.ts` to run the test. Cypress will automatically create the `/videos` directory and save a recording of the test there.
 
 ### Integrating E2E Testing into CI Workflow
+Cypress E2E testing was integrated directly into the CI workflow, moving beyond local testing. This change ensures that end-to-end tests are automatically run in a consistent environment with every update, giving us greater confidence in the project as it progresses.
+
 ---
 # Stage 3
 ## Containerizing Conduit with Docker
+In this stage, we focus on containerizing the Conduit API, frontend, and E2E testing environments using Docker. Containerization enables us to package each part of the application into isolated environments, ensuring consistency across different platforms. These components will be connected via Docker Compose to work together as a complete application.
+
 ### Containerizing the API
+By default, Uvicorn serves FastAPI on `127.0.0.1:8000`. The IP address `127.0.0.1` is the loopback address. It is used to communicate within the same machine, and is synonymous with `localhost` (`127.0.0.1` is just the actual IP used for this purpose). This means if the API is hosted on `127.0.0.1` on a container, it would not be accessible from outside of that container.
+
+Therefore, the API’s Dockerfile, `api/Dockerfile.api`, was configured to bind to `0.0.0.0:8000`.
+
+The IP address `0.0.0.0` is the wildcard address, allowing access from outside of the container. This allows the API to be accessed on port 8000 by external processes such as the frontend container.
+
+To build the API image, run:
+```sh
+./scripts/container/build-be-container.sh
+```
+
+To run the API container, run:
+```sh
+./scripts/container/run-be-container.sh
+```
+
+To stop the API container, run:
+```sh
+./scripts/container/stop-be-container.sh
+```
 
 ### Containerizing the Frontend
+Angular does not natively serve its own files; it requires a web server to do so. During development, the Angular CLI (`ng serve`) provides a development server for testing and running the app locally, but this is not intended for production. In production, Angular apps are typically built into static files (HTML, CSS, and JavaScript) that are served by a web server, while Angular itself runs entirely client-side in the browser.
+
+AndyT2503's Angular frontend lacks a built-in web server, so when containerized, its static files cannot be served outside the container. To address this, the containerization process was split into a multi-stage Docker build: first, building the Angular app, then serving it on a web server. Nginx will handle the serving, using a `default.conf` file located in the frontend directory for configuration. The build stage compiles the Angular app and generates static files, which are then copied into an Nginx image that routes client-side requests to the frontend's `index.html` file.
+
+To build the frontend image, run:
+```sh
+./scripts/container/build-fe-container.sh
+```
+
+To run the frontend container, run:
+```sh
+./scripts/container/run-fe-container.sh
+```
+
+To stop the frontend container, run:
+```sh
+./scripts/container/stop-fe-container.sh
+```
 
 ### Containerizing the E2E Testing
+Containerizing the Cypress instance was straightforward.  Docker has various images for running Cypress locally and in CI. The only requirement was to include the frontend base URL as an environment variable in the Cypress container, which was achieved in the next step in the `docker-compose` file.
+
+To build the E2E image, run:
+```sh
+./scripts/container/build-e2e-container.sh
+```
+
+To run the E2E container, run:
+```sh
+./scripts/container/run-e2e-container.sh
+```
+
+To stop the E2E container, run:
+```sh
+./scripts/container/stop-e2e-container.sh
+```
 
 ### Composing Containers
+The three containers were composed together in a multi-container setup. These containers were connected over a single Docker network `real-world-network`. To build the Conduit composition, run:
+
+To build and run the Conduit composition, run:
+```sh
+./scripts/container/composition-up.sh
+```
+
+To stop the Conduit composition, run:
+```sh
+./scripts/container/composition-down.sh
+```
+
 ---
 # Stage 4
 ## Infrastructure Automation with Terraform and Conduit Deployment to AWS
 ### Preparation
+To prepare for this stage, follow these steps:
+
+1. Root .env and .secrets files The `.env.example` and `.secrets.example` files in the root directory are templates for the environment variables used by the infrastructure provisioning workflows. We need to create one of each for each environment we want to deploy. e.g.:
+  - .env.staging
+  - .secrets.staging
+  - .env.production
+  - .secrets.production
+  The `.env` and `.secrets` files can be almost completely filled in using the variables from previous stages.
+2. Install CBShell
+  Run the following commands to install and verify:
+  ```sh
+  pip install cbshell
+  cbshell –version
+  ```
+3. Log into Capella using CBShell
+  Run the following command and follow the prompts to access the Capella instance:
+  ```sh
+  cbshell login
+  ```
+4. CBShell configuration
+  Find the `/.cbsh` config file and copy the contents into the `CBSHELL_CONFIG` secret in the `.secrets` files.\
+  Heres an example of what that might look like:
+  ```sh
+  version = 1
+
+  [[cluster]]
+  identifier = "local"
+  connstr = "127.0.0.1"
+  default-bucket = "travel-sample"
+  username = "Administrator"
+  password = "password"
+
+  [[cluster]]
+  identifier = "remote"
+  connstr = "10.143.200.101"
+  default-bucket = "myapp"
+  username = "user"
+  password = "pass"
+  capella-organization = "my-org"
+
+  [[capella-organization]]
+  identifier = "my-org"
+  access-key = "get-your-own"
+  secret-key = "get-your-own"
+  default-project = "default"
+  ```
 
 ### Deployment to AWS with ECR and ECS
+Conduit will be deployed to AWS, consisting of three ECS services. Each ECS service will host one of the three Conduit containers: frontend, backend, and the E2E testing.
+
+On each deployment, ECS containers will be updated by pulling new images from ECR repositories. The CD pipeline will utilize a local Docker instance to build, tag, and push the container images to these repositories.
+
+Here is a wire diagram showing the Conduit deployment:
+
+<div align="center">
+  <img src="./images/Figure9.png" alt="Figure 9: Conduit Deployment Infrastructure" width="500">
+  <p><em>Figure 9: Conduit Deployment Infrastructure</em></p>
+</div>
 
 ### Introduction to Terraform
+Terraform is an Infrastructure as Code (IaC) tool used for provisioning and managing infrastructure. It handles building, modifying, and tearing down infrastructure in a consistent, automated way.
+
+#### Terraform `Init`:
+This command initializes a Terraform working directory by setting up the necessary backend configuration and downloading any required modules or providers.
+
+#### Terraform Backend:
+Terraform maintains a backend, which consists of a `statefile` and a `statelock`.
+- The statefile stores the current state of infrastructure managed by Terraform, representing live resources.
+- The statelock prevents multiple instances of Terraform from making simultaneous changes to the infrastructure, ensuring consistency and avoiding conflicts. The backend can be stored locally or remotely. In this project, the backend will be stored remotely in an AWS S3 bucket with an AWS DynamoDB table for state locking. This allows different Terraform instances to access and manage the same state consistently.
+
+#### Terraform `Plan`:
+Terraform reads the current infrastructure state from the statefile and compares it with the desired configuration specified in the Terraform files. It then creates an execution plan, detailing what changes need to be made to reconcile the live infrastructure with the configuration.
+
+#### Terraform `apply`:
+This command applies the changes specified in the plan, executing the required actions to update the infrastructure, including modifying or destroying resources as needed.
+
+#### Terraform `destroy`:
+This command tears down all infrastructure currently defined in the statefile, removing the resources from the environment.
 
 ### Capella Instance Provisioning
+#### Terraform Capella Plug-in
+Terraform includes a Couchbase provider that allows for automated provisioning and configuration of Capella resources. This plugin can be used to define clusters, buckets, users, and roles within the Capella database platform as part of the IaC workflow.
 
 ### Using CBShell for Capella Management
+For this project, the management of Capella instances will be showcased using [CBShell](https://github.com/couchbaselabs/couchbase-shell), a command-line interface tool specifically designed for interacting with Couchbase Capella.
+
+CBShell Features:
+- Provisioning and configuring Capella clusters.
+- Setting up buckets for storing application data.
+- Managing access credentials and role-based permissions.
+- Streamlining database infrastructure setup without requiring extensive scripting.
+
+By using CBShell, the project ensures quick and reliable configuration of the Capella environment, complementing the automated provisioning of the rest of the infrastructure.
 
 ### CD Pipeline
+The CD pipeline automates the deployment process for both staging and production environments, ensuring consistent and repeatable deployments across environments.
+1. Environment Validation
+  - Before the pipeline runs, it verifies the specified environment (e.g., staging or production) to prevent accidental deployments in the wrong environment.
+2. Pipeline Execution
+  - The pipeline runs locally as a workflow runner, executing tasks in sequence to ensure a seamless deployment.
+3. Capella Infrastructure Provisioning
+  - CBShell is used to provision the Capella database infrastructure, including clusters and buckets.
+  - The bucket is ensured and the schema, collections and indexes are created.
+4. AWS Infrastructure Provisioning
+  - Terraform automates the creation of required AWS resources, such as ECS services, task definitions, and ECR repositories.
+  - The provisioning ensures the infrastructure is ready to host Conduit’s services.
+5. Building and Deploying Docker Images
+  - Docker is used to build container images for the frontend, backend, and E2E testing services.
+  - Images are tagged with version identifiers to allow traceability and rolled-back deployments if needed.
+  - These images are pushed to ECR for storage and versioning.
+6.	ECS Service Updates
+  - ECS task definitions are updated to use the newly deployed images from ECR.
+  - ECS services automatically pull and deploy the updated images, ensuring all instances are running the latest version of the application.
 
 ### TD Pipeline
+The TD pipeline ensures that infrastructure resources are safely removed when no longer needed, freeing up resources and avoiding unnecessary costs.
+
+1. Environment Validation
+  - Similar to the CD pipeline, the TD pipeline validates the environment to ensure the teardown process is applied to the correct environment (e.g., staging or production).
+  - This step prevents accidental deletion of critical resources.
+2. Pipeline Execution
+  - The TD pipeline is executed locally as a workflow runner, the same as the CD pipeline.
+3. Teardown AWS Infrastructure
+  - Terraform is used to destroy all AWS resources associated with the project.
+  - Resources such as ECS clusters, task definitions, and ECR repositories are removed.
+  - The process ensures all dependencies are handled, preventing orphaned resources.
+4. Teardown Capella Infrastructure.
+  - Using CBShell, Capella clusters, buckets, and associated configurations are deprovisioned.
+
 ---
 # Summary
+The Conduit project demonstrates a full-stack application implementation built with modularity and scalability in mind. It spans four development stages:
+1. **Backend Development:** Using FastAPI and Couchbase Capella, a robust API was created following TDD principles. The API supports secure and efficient database interactions with Capella's managed NoSQL services.
+2. **Frontend Integration and E2E Testing:** A pre-existing Angular frontend was adapted and integrated into the stack. Cypress E2E testing ensured the seamless interaction of the frontend with the backend.
+3. **Containerization:** Docker was used to containerize the backend, frontend, and testing suite, with Docker Compose managing their integration.
+4. **Infrastructure Automation:** Using Terraform, the application was deployed to AWS, establishing staging and production environments. Automated CD/TD pipelines streamlined deployments and resource management.
 
-## Prerequisites
-
-To run this prebuilt project, you will need:
-
-- [Couchbase Capella](https://www.couchbase.com/products/capella/) cluster with a bucket and scope loaded.
-- [Python](https://www.python.org/downloads/) 3.9 or higher installed
-  - Ensure that the Python version is [compatible](https://docs.couchbase.com/python-sdk/current/project-docs/compatibility.html#python-version-compat) with the Couchbase SDK.
-- Clone the repository.
-```
-git clone https://github.com/couchbase-examples/python-quickstart-fastapi.git
-```
-
-This project can be deployed locally, containerised locally or containerised remotely (AWS):
-
-# Local Deployment
-
-### Install Dependencies
-
-The dependencies for the application are specified in the `requirements.txt` file in the root folder. Dependencies can be installed through `pip` the default package manager for Python.
-```
-sh ./scripts/install-dependencies.sh
-```
-> Note: If your Python is not symbolically linked to python3, you need to run all commands using `python3` instead of `python`.
-
-### Manual Database Configuration Setup
-
-To know more about connecting to your Capella cluster, please follow the [instructions](https://docs.couchbase.com/cloud/get-started/connect.html).
-
-Specifically, you need to do the following:
-
-- Create the [database credentials](https://docs.couchbase.com/cloud/clusters/manage-database-users.html) to access the travel-sample bucket (Read and Write) used in the application.
-- [Allow access](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html) to the Cluster from the IP on which the application is running.
-
-All configuration for communication with the database is read from the environment variables. We have provided a convenience feature to read the environment variables from a local file, `.env` in the source folder.
-
-Create a copy of `.env.example` in the app folder & rename it to `.env` add the values for the Couchbase connection.
-
-> Note: Files starting with `.` could be hidden in the file manager in your Unix based systems including GNU/Linux and Mac OS.
-
-```sh
-DB_CONN_STR=<connection_string>
-DB_USERNAME=<user_with_read_write_permission_to_travel-sample_bucket>
-DB_PASSWORD=<password_for_user>
-DB_BUCKET_NAME=<bucket_name>
-DB_SCOPE_NAME=<scope_name>
-```
-
-> Note: The connection string expects the `couchbases://` or `couchbase://` part.
-
-### Setup JWT Token Configureation
-
-Create a random secret key that will be used to sign the JWT tokens.
-
-To generate a secure random secret key use the command:
-
-```
-./scripts/generate-secret-key.sh
-```
-
-And copy the output to the JWT_SECRET environment variable in the .env file.
-
-> Note: The CORS_ALLOWED_ORIGINS, CORS_ALLOWED_METHODS and CORS_ALLOWED_HEADERS environment variables can be left blank unless specific CORS options are required.
-
-
-## Running The API
-
-### Directly on Machine
-
-At this point, we have installed the dependencies, setup the cluster and configured the API with the credentials. The API is now ready and you can run it.
-
-```
-./scripts/start-api.sh
-```
-
-### Using Docker
-
-- Build the Docker image
-
-```sh
-./scripts/build-container.sh
-```
-
-- Run the Docker image
-
-```sh
-./scripts/run-container.sh
-```
-
-> Note: The `.env` file has the connection information to connect to your Capella cluster. These will be part of the environment variables in the Docker container.
-
-
-## Running Tests
-
-To run RealWorld API tests, use the following command:
-
-```
-./scripts/realworld-test.sh
-```
-
-To run tests, use the following command:
-
-```
-./scripts/pytest-test.sh
-```
+This project serves as a blueprint for scalable, testable, and deployable modern web applications, leveraging state-of-the-art tools and methodologies.
