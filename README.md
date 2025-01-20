@@ -155,7 +155,7 @@ A model can **embed** or **refer** to another model as one of its attributes. Th
 
 These relationships define the object relational structure illustrated in Figure 1:
 <div align="center">
-  <img src="./images/Figure1.png" alt="Figure 1: Object relational structure" width="300">
+  <img src="./images/Figure1.png" alt="Figure 1: Object relational structure" width="600">
   <p><em>Figure 1: Object relational structure</em></p>
 </div>
 
