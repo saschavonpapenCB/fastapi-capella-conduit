@@ -140,7 +140,7 @@ Run the following command and the API should connect itself to the Capella clust
 ### Models and Schemas
 Before starting the API, we need to understand how Conduit represents its data as objects. In Conduit, objects are distinct entities within the system, such as Users, Articles, and Comments.
 
-| Object **models** act as blueprints that outline the attributes of these objects. For instance, a model might specify that an object, like a food item, has a flavor. **Schemas** then provide detailed descriptions of these attributes, such as stating that a particular food has a ‘sweet’ flavor. While **models** establish the overall structure of the objects, **schemas** provide the specific details about each attribute. |
+Object **models** act as blueprints that outline the attributes of these objects. For instance, a model might specify that an object, like a food item, has a flavor. **Schemas** then provide detailed descriptions of these attributes, such as stating that a particular food has a ‘sweet’ flavor. While **models** establish the overall structure of the objects, **schemas** provide the specific details about each attribute.
 
 A model can **embed** or **refer** to another model as one of its attributes. This establishes a relationship between objects. Conduit has the following examples of this:
 
@@ -492,7 +492,7 @@ On each deployment, ECS containers will be updated by pulling new images from EC
 Here is a wire diagram showing the Conduit deployment:
 
 <div align="center">
-  <img src="./images/Figure9.png" alt="Figure 9: Conduit Deployment Infrastructure" width="500">
+  <img src="./images/Figure9.png" alt="Figure 9: Conduit Deployment Infrastructure" width="900">
   <p><em>Figure 9: Conduit Deployment Infrastructure</em></p>
 </div>
 
